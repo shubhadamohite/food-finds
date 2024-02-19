@@ -1,4 +1,4 @@
-##Food Finds 
+## Food Finds 
 
 This application lets you enter ingredients you have at home and suggests recipes you could make with them.
 This application was created using the latest version of NextJS (14).
