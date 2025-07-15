@@ -41,10 +41,10 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
           },
           body: JSON.stringify({ recipeId: recipe.id }),
         });
-  
+
         if (response.ok) {
           setLiked(!liked);
-  
+
           // Update local storage
           if (!liked) {
             localStorage.setItem(`likedRecipe-${id}`, 'true');
@@ -74,15 +74,15 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
       <div className="absolute bottom-0 left-0 right-0 p-4 bg-white">
         <div className="flex justify-between items-center">
           <button onClick={handleLike} className="text-pink-500 ">
-            {liked ? <BiSolidLike/> : <BiLike/>}
+            {liked ? <BiSolidLike /> : <BiLike />}
           </button>
           <Link href={`/recipes/${id}`}>
             <p className="text-pink-500 text-xs">Visit Recipe</p>
           </Link>
         </div>
       </div>
-       {/* Conditionally render the sign-in modal */}
-       {showSignInModal && (
+      {/* Conditionally render the sign-in modal */}
+      {showSignInModal && (
         <div className="fixed inset-0 flex items-center justify-center z-10">
           <SignInModal onClose={() => setShowSignInModal(false)} />
         </div>
@@ -102,13 +102,13 @@ const HomePage = () => {
     const cachedSearchQuery = localStorage.getItem("searchQuery");
     if (cachedSearchQuery) {
       setInputValue(cachedSearchQuery);
-      console.log("cached results",cachedSearchQuery)
+      console.log("cached results", cachedSearchQuery)
     }
     const cachedRecipes = localStorage.getItem("recipes");
     if (cachedRecipes) {
       setRecipes(JSON.parse(cachedRecipes));
     }
-  }, []); 
+  }, []);
 
 
   // Function to handle changes in the input value
@@ -122,17 +122,17 @@ const HomePage = () => {
       try {
         // Clear the cached recipes since we're making a new search
         localStorage.removeItem("recipes");
-  
+
         const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${inputValue}&number=25&ignorePantry=true&apiKey=c02a328cd90b48059bbb78001cb47132&includeNutrition=true`);
         if (!response.ok) {
           throw new Error('Failed to fetch recipes');
         }
         const data = await response.json();
         setRecipes(data);
-        
+
         // Cache the fetched recipes
         localStorage.setItem("recipes", JSON.stringify(data));
-  
+
         // Remember the search query
         localStorage.setItem("searchQuery", inputValue);
       } catch (error) {
@@ -141,51 +141,51 @@ const HomePage = () => {
       setLoading(false);
     }
   };
-    // Function to clear search results
-    const handleClearResults = () => {
-      setRecipes([]); // Clear recipes array
-      setInputValue(''); // Clear input value
-      localStorage.removeItem("recipes"); // Clear cached recipes
-      localStorage.removeItem("searchQuery"); // Clear cached search query
-    };
-    return (
-      <div className="flex flex-col items-center justify-center bg-peach-light p-10 min-h-screen">
-        <div className="container mx-auto flex flex-col items-center space-y-8">
-          <div className="w-full max-w-md">
-            <h1 className="antialiased text-3xl font-bold text-blu-dark whitespace-nowrap">What's in your fridge today?</h1>
-            <p className="text-sm text-center text-blu-dark p-4 whitespace-nowrap">Create a scrumptious meal with ingredients in your kitchen!</p>
-            <div className="relative w-full">
-              <input
-                type="text"
-                value={inputValue}
-                onChange={handleInputChange}
-                onKeyPress={handleKeyPress}
-                className="border border-gray-300 rounded-full p-2 pr-10 w-full text-sm text-neutral-500"
-                placeholder="Enter ingredients..."
+  // Function to clear search results
+  const handleClearResults = () => {
+    setRecipes([]); // Clear recipes array
+    setInputValue(''); // Clear input value
+    localStorage.removeItem("recipes"); // Clear cached recipes
+    localStorage.removeItem("searchQuery"); // Clear cached search query
+  };
+  return (
+    <div className="flex flex-col items-center justify-center bg-peach-light p-10 min-h-screen">
+      <div className="container mx-auto flex flex-col items-center space-y-8">
+        <div className="w-full max-w-md">
+          <h1 className="antialiased text-3xl font-bold text-blu-dark whitespace-nowrap">{"What's in your fridge today?"}</h1>
+          <p className="text-sm text-center text-blu-dark p-4 whitespace-nowrap">Create a scrumptious meal with ingredients in your kitchen!</p>
+          <div className="relative w-full">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyPress={handleKeyPress}
+              className="border border-gray-300 rounded-full p-2 pr-10 w-full text-sm text-neutral-500"
+              placeholder="Enter ingredients..."
+            />
+            {inputValue && (
+              <MdOutlineClear
+                className="absolute top-3 right-2 text-gray-500 cursor-pointer"
+                onClick={handleClearResults}
               />
-              {inputValue && (
-                <MdOutlineClear
-                  className="absolute top-3 right-2 text-gray-500 cursor-pointer"
-                  onClick={handleClearResults}
-                />
-              )}
-            </div>
-            <p className="text-xs text-center text-blu-dark p-4">Enter ingredients separated by commas and press Enter...</p>
+            )}
           </div>
-        </div>
-  
-        <div className="container mx-auto mt-8">
-          {loading && <p>Loading...</p>}
-          {recipes.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {recipes.map((recipe) => (
-                <RecipeCard key={recipe.id} recipe={recipe} />
-              ))}
-            </div>
-          )}
+          <p className="text-xs text-center text-blu-dark p-4">Enter ingredients separated by commas and press Enter...</p>
         </div>
       </div>
-    );
-  };
+
+      <div className="container mx-auto mt-8">
+        {loading && <p>Loading...</p>}
+        {recipes.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {recipes.map((recipe) => (
+              <RecipeCard key={recipe.id} recipe={recipe} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default HomePage;
