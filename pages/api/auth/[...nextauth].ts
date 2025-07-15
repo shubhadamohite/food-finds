@@ -15,16 +15,17 @@ export default NextAuth({
         const dummyPassword = "password";
 
         if (
+          credentials &&
           credentials.username === dummyUsername &&
           credentials.password === dummyPassword
         ) {
           // Return a user object if authentication succeeds
-          return { id: 1, name: "John Smith", email: "jsmith@example.com" };
+          return { id: "1", name: "John Smith", email: "jsmith@example.com" };
         } else {
           // Return null if authentication fails
           return null;
         }
-        
+
       },
     }),
   ],
