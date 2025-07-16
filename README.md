@@ -1,5 +1,5 @@
 ## Food Finds 
-DEMO - https://food-finds-stky-rchbhxv2y-shubhadas-projects-b5d098f1.vercel.app/
+DEMO - https://food-finds-stky.vercel.app/ 
 
 This application lets you enter ingredients you have at home and suggests recipes you could make with them.
 This application was created using the latest version of NextJS (14).
